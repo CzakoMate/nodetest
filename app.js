@@ -31,18 +31,59 @@ const users = [
   { id: "3", name: "Sam Johnson" },
 ];
 app.get("/api/users", (req, res) => {
-  for (let i = 0; i < users.length; i++) {
-    if (users) {
-      res.status(200).send(<p>users[i].name</p>);
-    }
+  let ki = "";
+  for (let user in users) {
+    ki += "<p> id: " + users[user].id + ", name: " + users[user].name + "</p>";
+  }
+  if (users.length > 0) {
+    res.status(200).send(ki);
+  } else {
+    res.status(400).send("Bad request users data not found!");
   }
 });
-app.get(" /api/users/:id", (req, res) => {});
-app.get(" /api/users", (req, res) => {});
-app.get(" /api/users/:id", (req, res) => {});
-app.get(" /api/users/:id", (req, res) => {});
+for (let user in users) {
+  const route = "/api/users/:" + user.id;
+  app.get(route, (req, res) => {
+    res.send(
+      "<p> id: " + users[user].id + ", name: " + users[user].name + "</p>"
+    );
+  });
+}
+for (let user in users) {
+  const route = "/api/users/:" + user.id;
+  app.post(route, (req, res, err) => {
+    req.accepts("json");
+    if (err) {
+      res.status(401);
+    } else {
+      res.status(201);
+    }
+  });
+}
+for (let user in users) {
+  const route = "/api/users/:" + user.id;
+  app.put(route, (req, res, err) => {
+    req.accepts("json");
+    if (err) {
+      res.status(400);
+    } else {
+      res.status(200);
+    }
+  });
+}
+for (let user in users) {
+  const route = "/api/users/:" + user.id;
+  app.delete(route, (req, res) => {
+    req.accepts("json");
+    if (err) {
+      res.status(400);
+    } else {
+      res.status(204);
+    }
+  });
+}
 app.use((req, res) => {
-  res.status(404).send(<h1>404-es hiba az oldal nem található!</h1>);
+  res.status(404).send("404-es hiba az oldal nem található!");
 });
 app.listen(PORT, () => {
   console.log("A server listens on localhost:" + PORT);
